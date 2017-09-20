@@ -9,9 +9,9 @@ using namespace std;
 
 int main()
 {
-	Person p1("Matthew", "Wong");
-	cout << p1.firstName << endl;
-	cout << p1.lastName;
-    return 0;
+	
+
+
+	return 0;
 }
 

@@ -2,13 +2,13 @@
 #include "Person.h"
 
 
-Person::Person(string a, string b)
+Person::Person(Name n, Address a, PhoneNumber p) : name(n), address(a), phone(p)
 {
-	firstName = a;
-	lastName = b;
+
 }
 
 
 Person::~Person()
 {
 }
+

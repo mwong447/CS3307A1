@@ -1,12 +1,18 @@
 #pragma once
-#include <string>
-using namespace std;
+#include "Name.h"
+#include "Address.h"
+#include "PhoneNumber.h"
+
+
 
 class Person
 {
 public:
-	string firstName, lastName;
-	Person(string,string);
+	Person(Name, Address, PhoneNumber);
 	~Person();
+	Name name;
+	Address address;
+	PhoneNumber phone;
+
 };
 
