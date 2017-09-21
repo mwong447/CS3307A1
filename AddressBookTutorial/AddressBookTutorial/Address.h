@@ -11,11 +11,19 @@ public:
 	string getCity();
 	string getProvince();
 	string getCountry();
+	int getNumber();
+	string getAddress();
 	void setStreet(string);
 	void setCity(string);
 	void setProvince(string);
 	void setCountry(string);
+	void setNumber(int);
 	~Address();
+	string streetToJSON();
+	string cityToJSON();
+	string provinceToJSON();
+	string countryToJSON();
+	
 private:
 	string street;
 	string city;

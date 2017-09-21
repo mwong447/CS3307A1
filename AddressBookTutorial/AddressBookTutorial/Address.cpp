@@ -24,6 +24,26 @@ Address::~Address()
 {
 }
 
+string Address::streetToJSON()
+{
+	return "\"streetaddress\"" + string(":  ") + string("\"") + to_string(getNumber()) + string(" ") + getStreet() +  string("\"");
+}
+
+string Address::cityToJSON()
+{
+	return "\"city\"" + string(":  ") + string("\"") + getCity() + string("\"");
+}
+
+string Address::provinceToJSON()
+{
+	return "\"province\"" + string(":  ") + string("\"") + getProvince() +string("\"");
+}
+
+string Address::countryToJSON()
+{
+	return "\"country\"" + string(":  ") + string("\"") + getCountry() + string("\"");
+}
+
 string Address::getStreet()
 {
 	return street;
@@ -44,6 +64,11 @@ string Address::getCountry()
 	return country;
 }
 
+int Address::getNumber()
+{
+	return number;
+}
+
 void Address::setStreet(string x)
 {
 	street = x;
@@ -62,4 +87,14 @@ void Address::setProvince(string x)
 void Address::setCountry(string x)
 {
 	country = x;
+}
+
+void Address::setNumber(int a)
+{
+	number = a;
+}
+
+string Address::getAddress()
+{
+	return to_string(number) + string(" ") + getStreet() + string(" ") + getCity() + string(" ") + getProvince() + string(" ") + getCountry();
 }

@@ -10,6 +10,7 @@ public:
 	~PhoneNumber();
 	PhoneNumber();
 	string getPhoneNumber();
+	string PhoneNumberToJSON();
 
 private:
 	string areaCode;

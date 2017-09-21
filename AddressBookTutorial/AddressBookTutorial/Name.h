@@ -14,6 +14,8 @@ public:
 	string getLastName();
 	void setFirstName(string x);
 	void setLastName(string y);
+	string lastNameToJSON();
+	string firstNameToJSON();
 
 private:
 	string firstName, lastName;

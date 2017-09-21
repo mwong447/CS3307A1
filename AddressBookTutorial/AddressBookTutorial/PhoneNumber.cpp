@@ -12,8 +12,8 @@ PhoneNumber::PhoneNumber(string x)
 		}
 
 		areaCode = x.substr(0, 3);
-		firstPart = x.substr(4, 7);
-		secondPart = x.substr(7, 11);
+		firstPart = x.substr(3, 3);
+		secondPart = x.substr(6, 4);
 
 	}
 
@@ -32,4 +32,9 @@ PhoneNumber::~PhoneNumber()
 string PhoneNumber::getPhoneNumber()
 {
 	return areaCode + "-" + firstPart + "-" + secondPart;
+}
+
+string PhoneNumber::PhoneNumberToJSON()
+{
+	return "\"phone\"" + string(":  ") + string("\"") + getPhoneNumber() + string("\"");
 }

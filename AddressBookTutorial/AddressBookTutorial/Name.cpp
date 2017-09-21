@@ -39,3 +39,12 @@ void Name::setLastName(string y)
 	lastName = y;
 }
 
+string Name::lastNameToJSON()
+{
+	return "\"lastname\"" + string(":  ") + string("\"") + getLastName() + string("\"");
+}
+
+string Name::firstNameToJSON()
+{
+	return "\"firstname\"" + string(":  ") + string("\"") + getFirstName() + string("\"");
+}
