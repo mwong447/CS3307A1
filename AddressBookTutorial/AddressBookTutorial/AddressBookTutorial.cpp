@@ -5,12 +5,50 @@
 #include <iostream>
 #include "Person.h"
 #include "Randomizer.h"
+#include <Wt\WApplication>
+#include <Wt\WBreak>
+#include <Wt\WContainerWidget>
+#include <Wt\WLineEdit>
+#include <Wt\WPushButton>
+#include <Wt\WText>
+#include <Wt\WTable>
+#include <Wt\WString>
 
 
-using namespace std;
 
-int main()
+using namespace Wt;
+
+class AddressBookTutorial :public WApplication
 {
+public:
+	AddressBookTutorial(const WEnvironment& env);
+
+private:
+	WLineEdit *nameEdit_;
+	WText *greeting_;
+	WString *number_;
+	void greet();
+
+};
+
+void AddressBookTutorial::greet()
+{
+	WString newString = WString(nameEdit_->text());
+	greeting_->setText("Hello there, " + newString);
+}
+
+AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
+	: Wt::WApplication(env)
+{
+
+	//Initial set up
+	setTitle("Addressbook");
+	root()->addWidget(new WText("Enter Number of People you want to generate:"));
+	nameEdit_ = new WLineEdit(root());
+	nameEdit_->setFocus();
+	WPushButton *button = new WPushButton("Generate Records", root());
+	button->setMargin(5, Left);
+
 	vector<string> firstNames;
 	vector<string> lastNames;
 	vector<string> cities;
@@ -22,7 +60,6 @@ int main()
 	{
 		digits.push_back(i);
 	}
-
 
 	//Setting up static vector lists for the address book
 	firstNames.push_back("Matthew");
@@ -72,6 +109,25 @@ int main()
 	streets.push_back("North Marmion Academy Lawn");
 	streets.push_back("South Hamstrom Road");
 
+	Wt::WTable *table = new Wt::WTable();
+	root()->addWidget(table);
+	root()->addWidget(new WBreak());
+	
+	greeting_ = new WText(root());
+	button->clicked().connect(this, &AddressBookTutorial::greet);
+	nameEdit_->enterPressed().connect(boost::bind(&AddressBookTutorial::greet, this));
+}
+
+WApplication *createApplication(const WEnvironment& env)
+{
+	return new AddressBookTutorial(env);
+}
+
+
+int main(int argc, char **argv)
+{
+	
+
 	/*  Driver for JSON Methods
 	Name n1("Matthew", "Wong");
 	cout << n1.firstNameToJSON() << endl;
@@ -113,6 +169,7 @@ int main()
 		cout << random << endl;
 	}
 	*/
+	/*
 	for (int i = 0; i < 50; i++)
 	{
 		Address a1 = r.randomAddress(digits,streets,cities,provinces);
@@ -120,9 +177,13 @@ int main()
 		PhoneNumber p1 = r.randomPhone(digits);
 		Person person(n1, a1, p1);
 		addressBook.push_back(person);
-		cout << addressBook[i].name.getFirstName() + addressBook[i].address.getAddress() << endl;
+		cout << addressBook[i].getName().getFirstName() + addressBook[i].getAddress().getAddress() << endl;
 	}	
 	
+	
+	*/
+	
+	return WRun(argc, argv,&createApplication);
 
 
 	return 0;

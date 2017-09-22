@@ -29,6 +29,11 @@ string Name::getLastName()
 	return lastName;
 }
 
+Name Name::getName()
+{
+	return Name();
+}
+
 void Name::setFirstName(string x)
 {
 	firstName = x;

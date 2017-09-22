@@ -10,14 +10,10 @@ PhoneNumber::PhoneNumber(string x)
 		{
 			throw "Invalid Data Entry";
 		}
-
 		areaCode = x.substr(0, 3);
 		firstPart = x.substr(3, 3);
 		secondPart = x.substr(6, 4);
-
 	}
-
-	
 }
 
 PhoneNumber::PhoneNumber()

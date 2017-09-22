@@ -12,6 +12,7 @@ public:
 
 	string getFirstName();
 	string getLastName();
+	Name getName();
 	void setFirstName(string x);
 	void setLastName(string y);
 	string lastNameToJSON();
