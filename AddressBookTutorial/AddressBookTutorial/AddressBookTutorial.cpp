@@ -14,9 +14,9 @@
 #include <Wt\WTable>
 #include <Wt\WString>
 
-
-
 using namespace Wt;
+
+
 
 class AddressBookTutorial :public WApplication
 {
@@ -26,29 +26,39 @@ public:
 private:
 	WLineEdit *nameEdit_;
 	WText *greeting_;
-	WString *number_;
-	void greet();
+	WText *number_;
+	WTable *table;
+	void message();
+	void clear();
+	void generate();
+	Randomizer r;
+	bool success;
+	int getNumber(string);
+	int rand = 0;
 
+
+	
 };
 
-void AddressBookTutorial::greet()
+void AddressBookTutorial::clear()
 {
-	WString newString = WString(nameEdit_->text());
-	greeting_->setText("Hello there, " + newString);
+	for (int i = 1; i < rand ; i++)
+	{
+		table->elementAt(i, 0)->clear();
+		table->elementAt(i, 1)->clear();
+		table->elementAt(i, 2)->clear();
+		table->elementAt(i, 3)->clear();
+		table->elementAt(i, 4)->clear();
+		table->elementAt(i, 5)->clear();
+		table->elementAt(i, 6)->clear();
+
+	}
 }
 
-AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
-	: Wt::WApplication(env)
+void AddressBookTutorial::generate()
 {
 
 	//Initial set up
-	setTitle("Addressbook");
-	root()->addWidget(new WText("Enter Number of People you want to generate:"));
-	nameEdit_ = new WLineEdit(root());
-	nameEdit_->setFocus();
-	WPushButton *button = new WPushButton("Generate Records", root());
-	button->setMargin(5, Left);
-
 	vector<string> firstNames;
 	vector<string> lastNames;
 	vector<string> cities;
@@ -60,14 +70,17 @@ AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
 	{
 		digits.push_back(i);
 	}
-
 	//Setting up static vector lists for the address book
 	firstNames.push_back("Matthew");
-	firstNames.push_back("Noah");
-	firstNames.push_back("James");
+	firstNames.push_back("Isabella");
+	firstNames.push_back("Sophie");
 	firstNames.push_back("John");
 	firstNames.push_back("Robert");
 	firstNames.push_back("William");
+	firstNames.push_back("Oliver");
+	firstNames.push_back("Ava");
+	firstNames.push_back("Victoria");
+	firstNames.push_back("Jessica");
 
 	lastNames.push_back("Wang");
 	lastNames.push_back("Zhang");
@@ -75,6 +88,10 @@ AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
 	lastNames.push_back("Smith");
 	lastNames.push_back("Garcia");
 	lastNames.push_back("Rossi");
+	lastNames.push_back("Muller");
+	lastNames.push_back("Taylor");
+	lastNames.push_back("Wood");
+	lastNames.push_back("Stewart");
 
 	provinces.push_back("Ontario");
 	provinces.push_back("British Columbia");
@@ -109,13 +126,106 @@ AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
 	streets.push_back("North Marmion Academy Lawn");
 	streets.push_back("South Hamstrom Road");
 
-	Wt::WTable *table = new Wt::WTable();
-	root()->addWidget(table);
-	root()->addWidget(new WBreak());
+	if (rand > 0)
+	{
+		for (int i = 1; i < rand + 1; i++)
+		{
+			table->elementAt(i, 0)->clear();
+			table->elementAt(i, 1)->clear();
+			table->elementAt(i, 2)->clear();
+			table->elementAt(i, 3)->clear();
+			table->elementAt(i, 4)->clear();
+			table->elementAt(i, 5)->clear();
+			table->elementAt(i, 6)->clear();
+
+		}
+	}
 	
+	rand = stoi(nameEdit_->text());
+	if (rand >= 0)
+	{
+		for (int i = 1; i < rand + 1; i++)
+		{
+			Name n1 = r.randomName(firstNames, lastNames);
+			Address a1 = r.randomAddress(digits, streets, cities, provinces);
+			PhoneNumber p1 = r.randomPhone(digits);
+			table->elementAt(i, 0)->addWidget(new WText(n1.getFirstName()));
+			table->elementAt(i, 1)->addWidget(new WText(n1.getLastName()));
+			table->elementAt(i, 2)->addWidget(new WText(to_string(a1.getNumber()) + string(" ") + a1.getStreet()));
+			table->elementAt(i, 3)->addWidget(new WText(a1.getCity()));
+			table->elementAt(i, 4)->addWidget(new WText(a1.getProvince()));
+			table->elementAt(i, 5)->addWidget(new WText(a1.getCountry()));
+			table->elementAt(i, 6)->addWidget(new WText(p1.getPhoneNumber()));
+		}
+		rand = table->rowCount() - 1;
+	}
+	rand = stoi(nameEdit_->text());
+	
+}
+
+void AddressBookTutorial::message()
+{
+	WString newString = WString(nameEdit_->text());
+	string s = newString.toUTF8();
+	
+	try
+	{
+
+		greeting_->setText(to_string(stoi(s)) +string(" number of records generated."));
+		number_->setText(to_string(stoi(s)));
+	}
+	catch (exception& e)
+	{
+		greeting_->setText(e.what());
+	}
+	
+}
+
+int AddressBookTutorial::getNumber(string x)
+{
+	return stoi(x);
+}
+
+
+AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
+	: Wt::WApplication(env)
+{
+
+
+
+	setTitle("Addressbook");
+	
+	root()->addWidget(new WText("Enter Number of People you want to generate:"));
+	nameEdit_ = new WLineEdit(root());
+	nameEdit_->setFocus();
+	WPushButton *button = new WPushButton("Generate Records", root());
+	button->setMargin(5, Left);
+	table = new WTable();
+	table->setHeaderCount(1, Orientation::Horizontal);
+	table->setWidth(WLength("100%"));
+	root()->addWidget(table);
+	table->elementAt(0, 0)->addWidget(new WText("First Name"));
+	table->elementAt(0, 1)->addWidget(new WText("Last Name"));
+	table->elementAt(0, 2)->addWidget(new WText("Street"));
+	table->elementAt(0, 3)->addWidget(new WText("City"));
+	table->elementAt(0, 4)->addWidget(new WText("Province"));
+	table->elementAt(0, 5)->addWidget(new WText("Country"));
+	table->elementAt(0, 6)->addWidget(new WText("Phone"));
+	
+	button->clicked().connect(this, &AddressBookTutorial::message);
+	button->clicked().connect(this, &AddressBookTutorial::generate);
+	nameEdit_->enterPressed().connect(boost::bind(&AddressBookTutorial::message, this));
+	root()->addWidget(new WBreak());
 	greeting_ = new WText(root());
-	button->clicked().connect(this, &AddressBookTutorial::greet);
-	nameEdit_->enterPressed().connect(boost::bind(&AddressBookTutorial::greet, this));
+	root()->addWidget(new WBreak());
+	number_ = new WText(to_string(rand), root());
+
+	
+	
+	
+	
+
+	
 }
 
 WApplication *createApplication(const WEnvironment& env)
@@ -147,7 +257,7 @@ int main(int argc, char **argv)
 	cout << n1.lastNameToJSON() << endl;
 
 	*/
-	Randomizer r;
+
 	
 	/*Test for Phone Number randomizer
 	

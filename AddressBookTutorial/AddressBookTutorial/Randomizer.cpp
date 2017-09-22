@@ -7,15 +7,6 @@ Randomizer::Randomizer()
 {
 }
 
-Randomizer::Randomizer(int x,vector<string> y, vector<string> z)
-{
-	for (int i = 0; i < x; i++)
-	{
-		addressBook.push_back(randomName(y, z));
-	}
-}
-
-
 
 Randomizer::~Randomizer()
 {
@@ -76,6 +67,16 @@ PhoneNumber Randomizer::randomPhone(vector<int> digits)
 	PhoneNumber p1(s);
 	return p1;
 
+}
+
+vector<Person> Randomizer::getAddressBook()
+{
+	return addressBook;
+}
+
+void Randomizer::addEntry(Person p)
+{
+	addressBook.push_back(p);
 }
 
 
