@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 #include "Person.h"
 #include "Randomizer.h"
 #include <Wt\WApplication>
@@ -13,6 +14,7 @@
 #include <Wt\WText>
 #include <Wt\WTable>
 #include <Wt\WString>
+#include <Wt\WServer>
 
 using namespace Wt;
 
@@ -35,9 +37,9 @@ private:
 	bool success;
 	int getNumber(string);
 	int rand = 0;
+	bool hasOnlyDigits(string);
+	bool test = true;
 
-
-	
 };
 
 void AddressBookTutorial::clear()
@@ -141,25 +143,32 @@ void AddressBookTutorial::generate()
 		}
 	}
 	
-	rand = stoi(nameEdit_->text());
-	if (rand >= 0)
+	string s = nameEdit_->text().toUTF8();
+	test = hasOnlyDigits(s);
+	if (test == true)
 	{
-		for (int i = 1; i < rand + 1; i++)
+		rand = stoi(nameEdit_->text());
+		if (rand >= 0)
 		{
-			Name n1 = r.randomName(firstNames, lastNames);
-			Address a1 = r.randomAddress(digits, streets, cities, provinces);
-			PhoneNumber p1 = r.randomPhone(digits);
-			table->elementAt(i, 0)->addWidget(new WText(n1.getFirstName()));
-			table->elementAt(i, 1)->addWidget(new WText(n1.getLastName()));
-			table->elementAt(i, 2)->addWidget(new WText(to_string(a1.getNumber()) + string(" ") + a1.getStreet()));
-			table->elementAt(i, 3)->addWidget(new WText(a1.getCity()));
-			table->elementAt(i, 4)->addWidget(new WText(a1.getProvince()));
-			table->elementAt(i, 5)->addWidget(new WText(a1.getCountry()));
-			table->elementAt(i, 6)->addWidget(new WText(p1.getPhoneNumber()));
+			for (int i = 1; i < rand + 1; i++)
+			{
+				Name n1 = r.randomName(firstNames, lastNames);
+				Address a1 = r.randomAddress(digits, streets, cities, provinces);
+				PhoneNumber p1 = r.randomPhone(digits);
+				table->elementAt(i, 0)->addWidget(new WText(n1.getFirstName()));
+				table->elementAt(i, 1)->addWidget(new WText(n1.getLastName()));
+				table->elementAt(i, 2)->addWidget(new WText(to_string(a1.getNumber()) + string(" ") + a1.getStreet()));
+				table->elementAt(i, 3)->addWidget(new WText(a1.getCity()));
+				table->elementAt(i, 4)->addWidget(new WText(a1.getProvince()));
+				table->elementAt(i, 5)->addWidget(new WText(a1.getCountry()));
+				table->elementAt(i, 6)->addWidget(new WText(p1.getPhoneNumber()));
+			}
+			rand = table->rowCount() - 1;
 		}
-		rand = table->rowCount() - 1;
+		rand = stoi(nameEdit_->text());
 	}
-	rand = stoi(nameEdit_->text());
+
+	
 	
 }
 
@@ -186,13 +195,15 @@ int AddressBookTutorial::getNumber(string x)
 	return stoi(x);
 }
 
+bool AddressBookTutorial::hasOnlyDigits(string s)
+{
+	return (s.find_first_not_of("0123456789") == string::npos);
+}
+
 
 AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
 	: Wt::WApplication(env)
 {
-
-
-
 	setTitle("Addressbook");
 	
 	root()->addWidget(new WText("Enter Number of People you want to generate:"));
@@ -220,12 +231,6 @@ AddressBookTutorial::AddressBookTutorial(const Wt::WEnvironment& env)
 	root()->addWidget(new WBreak());
 	number_ = new WText(to_string(rand), root());
 
-	
-	
-	
-	
-
-	
 }
 
 WApplication *createApplication(const WEnvironment& env)
@@ -233,69 +238,85 @@ WApplication *createApplication(const WEnvironment& env)
 	return new AddressBookTutorial(env);
 }
 
+class ResourceServer : public Wt::WApplication
+{
+public:
+	ResourceServer(const Wt::WEnvironment &env, const std::string& title);
+
+private:
+	Wt::WLineEdit *sossy;
+	Wt::WText *sooshy;
+	void greet();
+};
+
+ResourceServer::ResourceServer(const Wt::WEnvironment & env, const string & title)
+	: Wt::WApplication(env)
+{
+	setTitle(title);
+
+	root()->addWidget(new Wt::WText("Your name, please ? "));
+	sossy = new Wt::WLineEdit(root());
+	Wt::WPushButton *button = new Wt::WPushButton("Say goodbye.", root());
+	root()->addWidget(new Wt::WBreak());
+	sooshy = new Wt::WText(root());
+	button->clicked().connect(this, &ResourceServer::greet);
+}
+
+void ResourceServer::greet()
+{
+	sooshy->setText("Goodbye, " + sossy->text());
+}
+
+Wt::WApplication *createSecondApplication(const Wt::WEnvironment& env)
+{
+	return new ResourceServer(env, "Second app");
+}
+
+int myWRun(int argc, char *argv[], Wt::ApplicationCreator createApplication, Wt::ApplicationCreator createSecondApplication)
+{
+	try {
+		// use argv[0] as the application name to match a suitable entry
+		// in the Wt configuration file, and use the default configuration
+		// file (which defaults to /etc/wt/wt_config.xml unless the environment
+		// variable WT_CONFIG_XML is set)
+		Wt::WServer server(argv[0], "");
+
+		// WTHTTP_CONFIGURATION is e.g. "/etc/wt/wthttpd"
+		server.setServerConfiguration(argc, argv, WTHTTP_CONFIGURATION);
+
+		// add a single entry point, at the default location (as determined
+		// by the server configuration's deploy-path)
+		server.addEntryPoint(Wt::Application, createApplication);
+		server.addEntryPoint(Wt::Application, createSecondApplication, "/person");
+		if (server.start()) {
+			int sig = Wt::WServer::waitForShutdown(argv[0]);
+
+			std::cerr << "Shutdown (signal = " << sig << ")" << std::endl;
+			server.stop();
+
+			/*
+			if (sig == SIGHUP)
+			WServer::restart(argc, argv, environ);
+			*/
+		}
+	}
+	catch (Wt::WServer::Exception& e) {
+		std::cerr << e.what() << "\n";
+		return 1;
+	}
+	catch (std::exception& e) {
+		std::cerr << "exception: " << e.what() << "\n";
+		return 1;
+	}
+}
+
 
 int main(int argc, char **argv)
 {
-	
-
-	/*  Driver for JSON Methods
-	Name n1("Matthew", "Wong");
-	cout << n1.firstNameToJSON() << endl;
-	cout << n1.lastNameToJSON() << endl;
-
-	Address a1(37, "Elderfield Crescent", "Toronto", "Ontario", "Canada");
-	cout << a1.streetToJSON() << endl;
-	cout << a1.cityToJSON() << endl;
-	cout << a1.provinceToJSON() << endl;
-	cout << a1.countryToJSON() << endl;
-	PhoneNumber	p1("1234567890");
-	cout << p1.PhoneNumberToJSON() << endl;
-	*/
-	/*
-	Name n1 = r.randomName(firstNames, lastNames);
-	cout << n1.firstNameToJSON() << endl;
-	cout << n1.lastNameToJSON() << endl;
-
-	*/
 
 	
-	/*Test for Phone Number randomizer
-	
 
-	for (int i = 0; i < 50; i++)
-	{
-	PhoneNumber p1 = r.randomPhone(digits);
-	cout << p1.getPhoneNumber() << endl;
-	}
-	*/
-	
-
-	
-	/*
-	int random = r.randomizeNumber(digits);
-	for (int i = 0; i < 15; i++)
-	{
-		random = r.randomizeNumber(digits);
-		cout << random << endl;
-	}
-	*/
-	/*
-	for (int i = 0; i < 50; i++)
-	{
-		Address a1 = r.randomAddress(digits,streets,cities,provinces);
-		Name n1 = r.randomName(firstNames, lastNames);
-		PhoneNumber p1 = r.randomPhone(digits);
-		Person person(n1, a1, p1);
-		addressBook.push_back(person);
-		cout << addressBook[i].getName().getFirstName() + addressBook[i].getAddress().getAddress() << endl;
-	}	
-	
-	
-	*/
-	
-	return WRun(argc, argv,&createApplication);
-
-
+	return myWRun(argc, argv,&createApplication, &createSecondApplication);
 	return 0;
 }
 

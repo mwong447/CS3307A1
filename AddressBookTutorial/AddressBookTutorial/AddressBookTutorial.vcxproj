@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Address.h" />
+    <ClInclude Include="MyPerson.h" />
     <ClInclude Include="Name.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="PhoneNumber.h" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="AddressBookTutorial.cpp" />
+    <ClCompile Include="MyPerson.cpp" />
     <ClCompile Include="Name.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="PhoneNumber.cpp" />
