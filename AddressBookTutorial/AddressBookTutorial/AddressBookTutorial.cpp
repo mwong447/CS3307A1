@@ -67,8 +67,6 @@ void AddressBookTutorial::clear()
 
 void AddressBookTutorial::generate()
 {
-
-
 	if (rand > 0)
 	{
 		for (int i = 1; i < rand + 1; i++)
@@ -81,7 +79,6 @@ void AddressBookTutorial::generate()
 			table->elementAt(i, 5)->clear();
 			table->elementAt(i, 6)->clear();
 			people.clear();
-
 		}
 	}
 	
