@@ -13,6 +13,7 @@ public:
 	Name getName();
 	Address getAddress();
 	PhoneNumber getPhoneNumber();
+	
 private:
 	Name name;
 	Address address;

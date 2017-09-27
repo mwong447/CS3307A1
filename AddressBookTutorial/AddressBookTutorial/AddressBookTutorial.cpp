@@ -2,8 +2,7 @@
 //
 
 #include "stdafx.h"
-#include <iostream>
-#include <string>
+#include "MyPerson.h"
 #include "Person.h"
 #include "Randomizer.h"
 #include <Wt\WApplication>
@@ -18,6 +17,15 @@
 
 using namespace Wt;
 
+int x = 0;
+std::vector<int> v = { 1,2,3,4 };
+std::vector<string> firstNames{ "Matthew","Isabella","Sophie","John","Robert","William","Oliver","Ava","Victoria","Jessica" };
+std::vector<string> lastNames{ "Wang","Zhang","Lee","Smith","Garcia","Rossi","Muller","Taylor","Wood","Stewart" };
+std::vector<string> provinces{ "Ontario","British Columbia","Manitoba","Saskatchewan","Prince Edward Island","New Brunswick","Newfoundland","Alberta","Nova Scotia","Quebec" };
+std::vector<string> cities{ "Kanata","Robertsonville","Beaver","Stayner","Mont Tremblant","Hercules","Newcastle","Canuck","Baden","Gaspe" };
+std::vector<string> streets{ "West Common Wood","North Windridge Street","South Waldeberg Grove","South Winburn Mount","Old Killam Hill","North Ravine Forest Grove","Hillside View Plaza","Southeast Volk Terrace","North Marmion Academy Lawn","South Hamstrom Road" };
+std::vector<int> digits{ 0,1,2,3,4,5,6,7,8,9 };
+std::vector<Person> people;
 
 
 class AddressBookTutorial :public WApplication
@@ -60,73 +68,6 @@ void AddressBookTutorial::clear()
 void AddressBookTutorial::generate()
 {
 
-	//Initial set up
-	vector<string> firstNames;
-	vector<string> lastNames;
-	vector<string> cities;
-	vector<string> streets;
-	vector<string> provinces;
-	vector<int> digits;
-	vector<Person> addressBook;
-	for (int i = 0; i < 10; i++)
-	{
-		digits.push_back(i);
-	}
-	//Setting up static vector lists for the address book
-	firstNames.push_back("Matthew");
-	firstNames.push_back("Isabella");
-	firstNames.push_back("Sophie");
-	firstNames.push_back("John");
-	firstNames.push_back("Robert");
-	firstNames.push_back("William");
-	firstNames.push_back("Oliver");
-	firstNames.push_back("Ava");
-	firstNames.push_back("Victoria");
-	firstNames.push_back("Jessica");
-
-	lastNames.push_back("Wang");
-	lastNames.push_back("Zhang");
-	lastNames.push_back("Lee");
-	lastNames.push_back("Smith");
-	lastNames.push_back("Garcia");
-	lastNames.push_back("Rossi");
-	lastNames.push_back("Muller");
-	lastNames.push_back("Taylor");
-	lastNames.push_back("Wood");
-	lastNames.push_back("Stewart");
-
-	provinces.push_back("Ontario");
-	provinces.push_back("British Columbia");
-	provinces.push_back("Manitoba");
-	provinces.push_back("Saskatchewan");
-	provinces.push_back("Prince Edward Island");
-	provinces.push_back("New Brunswick");
-	provinces.push_back("Newfoundland");
-	provinces.push_back("Alberta");
-	provinces.push_back("Nova Scotia");
-	provinces.push_back("Quebec");
-
-	cities.push_back("Kanata");
-	cities.push_back("Robertsonville");
-	cities.push_back("Beaver");
-	cities.push_back("Stayner");
-	cities.push_back("Mont Tremblant");
-	cities.push_back("Hercules");
-	cities.push_back("Newcastle");
-	cities.push_back("Canuck");
-	cities.push_back("Baden");
-	cities.push_back("Gaspe");
-
-	streets.push_back("West Common Wood");
-	streets.push_back("North Windridge Street");
-	streets.push_back("South Waldeberg Grove");
-	streets.push_back("South Winburn Mount");
-	streets.push_back("Old Killam Hill");
-	streets.push_back("North Ravine Forest Grove");
-	streets.push_back("Hillside View Plaza");
-	streets.push_back("Southeast Volk Terrace");
-	streets.push_back("North Marmion Academy Lawn");
-	streets.push_back("South Hamstrom Road");
 
 	if (rand > 0)
 	{
@@ -139,6 +80,7 @@ void AddressBookTutorial::generate()
 			table->elementAt(i, 4)->clear();
 			table->elementAt(i, 5)->clear();
 			table->elementAt(i, 6)->clear();
+			people.clear();
 
 		}
 	}
@@ -155,6 +97,8 @@ void AddressBookTutorial::generate()
 				Name n1 = r.randomName(firstNames, lastNames);
 				Address a1 = r.randomAddress(digits, streets, cities, provinces);
 				PhoneNumber p1 = r.randomPhone(digits);
+				Person person(n1, a1, p1);
+				people.push_back(person);
 				table->elementAt(i, 0)->addWidget(new WText(n1.getFirstName()));
 				table->elementAt(i, 1)->addWidget(new WText(n1.getLastName()));
 				table->elementAt(i, 2)->addWidget(new WText(to_string(a1.getNumber()) + string(" ") + a1.getStreet()));
@@ -287,7 +231,8 @@ int myWRun(int argc, char *argv[], Wt::ApplicationCreator createApplication, Wt:
 		// add a single entry point, at the default location (as determined
 		// by the server configuration's deploy-path)
 		server.addEntryPoint(Wt::Application, createApplication);
-		server.addEntryPoint(Wt::Application, createSecondApplication, "/person");
+		//server.addEntryPoint(Wt::Application, createSecondApplication,"/person");
+		server.addResource(new MyPerson, "/person");
 		if (server.start()) {
 			int sig = Wt::WServer::waitForShutdown(argv[0]);
 
@@ -313,8 +258,6 @@ int myWRun(int argc, char *argv[], Wt::ApplicationCreator createApplication, Wt:
 
 int main(int argc, char **argv)
 {
-
-	
 
 	return myWRun(argc, argv,&createApplication, &createSecondApplication);
 	return 0;

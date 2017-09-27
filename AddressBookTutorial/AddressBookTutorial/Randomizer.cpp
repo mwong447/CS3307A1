@@ -79,6 +79,11 @@ void Randomizer::addEntry(Person p)
 	addressBook.push_back(p);
 }
 
+void Randomizer::clearAddressBook()
+{
+	addressBook.clear();
+}
+
 
 
 int Randomizer::randomize(vector<string> a)

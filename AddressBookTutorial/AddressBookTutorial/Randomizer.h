@@ -16,6 +16,7 @@ public:
 	PhoneNumber randomPhone(vector<int>);
 	vector<Person> getAddressBook();
 	void addEntry(Person);
+	void clearAddressBook();
 private:
 	vector<Person> addressBook;
 	int randomize(vector<string>);
