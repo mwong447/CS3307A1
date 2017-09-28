@@ -1,37 +1,33 @@
 ========================================================================
-    CONSOLE APPLICATION : [!output PROJECT_NAME] Project Overview
+    CONSOLE APPLICATION : CS 3307A - Individual Wt (Witty) Assignment
 ========================================================================
 
-AppWizard has created this [!output PROJECT_NAME] application for you.
-
-This file contains a summary of what you will find in each of the files that
-make up your [!output PROJECT_NAME] application.
-
-
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
-
-    This is the main application source file.
+The following header files, along with their implementations in the corresponding .cpp files, are included in this solution:
+Address.h
+MyPerson.h
+Name.h
+Person.h
+PhoneNumber.h
+Randomizer.h
+stadfx.h
+targetver.h
 
 /////////////////////////////////////////////////////////////////////////////
-Other standard files:
 
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named [!output PROJECT_NAME].pch and a precompiled types file named StdAfx.obj.
+This application was built using Microsoft Visual Studio 2017, so you will most likely need to install Wt along with
+Visual Studio to open this solution and to run it.
+
+You can do so by following the instructions listed here:
+https://redmine.webtoolkit.eu/projects/wt/wiki/Installing_Wt_on_MS_Windows
+
+This program was built using Wt 3.3.8 - therefore, the Windows libraries for version 3.3.8 were used for the corresponding
+Microsoft Visual Studio 2017 version.  The 64 bit version of the Wt libraries were used and can be downloaded from:
+
+https://github.com/emweb/wt/releases
+
+Please look for the Wt-3.3.8-msvs2017-Windows-x64-SDK.exe file.
 
 /////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
+After opening the solution and following the installation instructions, you should be able to build the solution using either
+the Debug or Release versions.
 /////////////////////////////////////////////////////////////////////////////

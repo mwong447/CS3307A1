@@ -17,7 +17,7 @@ void MyPerson::handleRequest(const Request & request, Response & response)
 	string s = request.path();
 	string y = request.pathInfo();
 	ostream &out = response.out();	
-	if (s.compare("/person") == 0 && y.length() == 0)
+	if ((s.compare("/people") == 0 || s.compare("/people") == 0) && y.length() == 0)
 	{
 		out << "  {" << endl;
 		out << "    \"" << "people" << "\"" << ": [" << endl;

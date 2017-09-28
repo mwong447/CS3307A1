@@ -229,7 +229,7 @@ int myWRun(int argc, char *argv[], Wt::ApplicationCreator createApplication, Wt:
 		// by the server configuration's deploy-path)
 		server.addEntryPoint(Wt::Application, createApplication);
 		//server.addEntryPoint(Wt::Application, createSecondApplication,"/person");
-		server.addResource(new MyPerson, "/person");
+		server.addResource(new MyPerson, "/people");
 		if (server.start()) {
 			int sig = Wt::WServer::waitForShutdown(argv[0]);
 
